@@ -4,18 +4,38 @@ Get latest Venom Linux staged image [here](https://github.com/venomlinux/ports/r
 
 ## Preparing partition
 
+### BIOS systems with MBR.
+
 Create a partition to install Venom Linux on.
 
 ```
 # cfdisk
 # mkswap /dev/sda1
-# mkfs.ext4 -L Venom /dev/sda2
+# mkfs.ext4 -L Venom /dev/sda3
 ```
 Create a directory to mount the created partition then mount it.
 
 ```
 # mkdir /mnt/venom
 # mount /dev/sda2 /mnt/venom
+```
+
+### EFI systems with GPT.
+
+EFI system requieres aditional partition in vfat for /boot, create it first:
+
+```
+# mkfs.vfat /dev/sda1
+# cfdisk
+# mkswap /dev/sda2
+# mkfs.ext4 -L Venom /dev/sda3
+```
+Create the directories to mount /root and /boot.
+
+```
+# mkdir -pv /mnt/venom/boot
+# mount /dev/sda2 /mnt/venom
+# mount /dev/sda1 /mnt/venom/boot/
 ```
 
 ## Extract Venom's image
